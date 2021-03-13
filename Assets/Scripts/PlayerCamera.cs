@@ -7,6 +7,8 @@ public class PlayerCamera : MonoBehaviour
 {
     
     public GameObject followTarget;
+    public GameObject StandardCamera;
+    public GameObject AimCamera; 
     
     [Header("Camera Settings")]
     [SerializeField] private float UpperPitchLimit = 80;
@@ -18,18 +20,43 @@ public class PlayerCamera : MonoBehaviour
     
     [Header("Debug Values")]
     [SerializeField] private Vector2 lookDelta;
+    [SerializeField] private bool _isRMBPresssed = false; 
     
+    private Animator _playerAnimator;
     private Transform _followTargetTransform;
     private Transform _playerTransform;
+    private PlayerState _playerState;
     private Vector2 _previousMouseDelta;
     
+    private static readonly int EquipArrow = Animator.StringToHash("EquipArrow");
+    private static readonly int IsAiming = Animator.StringToHash("IsAiming");
+
     // Start is called before the first frame update
     void Start()
     {
         _followTargetTransform = followTarget.transform;
         _playerTransform = transform;
+        _playerState = GetComponent<PlayerState>();
+        _playerAnimator = GetComponent<Animator>();
         _previousMouseDelta = Vector2.zero; 
         _followTargetTransform.localEulerAngles = new Vector3(DefaultCameraPitch, 0, 0);
+    }
+
+    public void OnAim(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            if (!_playerState.IsBowEquipped) return;
+            _playerState.IsAiming = true; 
+            _isRMBPresssed = true;
+            _playerAnimator.SetTrigger(EquipArrow);
+        }
+        else
+        {
+            _playerState.IsAiming = false; 
+            _isRMBPresssed = false;
+        }
+        _playerAnimator.SetBool(IsAiming, _playerState.IsAiming);
     }
 
     public void OnLook(InputValue value)
