@@ -66,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _moveDirection = _playerTransform.forward * _inputVector.y + _playerTransform.right * _inputVector.x;
         float currentSpeed = _playerState.IsRunning ? RunSpeed : WalkSpeed;
+        if (_playerState.IsAiming) currentSpeed = WalkSpeed / 2;
         Vector3 movementDirection = _moveDirection * (currentSpeed * Time.deltaTime);
         transform.position += movementDirection;
     }
