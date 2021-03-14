@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
         if (value.isPressed)
         {
             if (!_playerState.IsBowEquipped) return;
+            if (_playerState.IsAiming) return;
             _playerState.IsRunning = true;
         }
         else

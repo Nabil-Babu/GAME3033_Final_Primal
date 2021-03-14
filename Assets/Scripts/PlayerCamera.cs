@@ -50,11 +50,15 @@ public class PlayerCamera : MonoBehaviour
             _playerState.IsAiming = true; 
             _isRMBPresssed = true;
             _playerAnimator.SetTrigger(EquipArrow);
+            StandardCamera.SetActive(false);
+            AimCamera.SetActive(true);
         }
         else
         {
             _playerState.IsAiming = false; 
             _isRMBPresssed = false;
+            StandardCamera.SetActive(true);
+            AimCamera.SetActive(false);
         }
         _playerAnimator.SetBool(IsAiming, _playerState.IsAiming);
     }
