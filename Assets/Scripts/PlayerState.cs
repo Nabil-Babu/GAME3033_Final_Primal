@@ -7,5 +7,8 @@ public class PlayerState : MonoBehaviour
     public bool IsRunning;
     public bool IsBowEquipped;
     public bool IsStealthed;
-    public bool IsAiming; 
+    public bool IsAiming;
+
+    public int CurrentArrows = 20; 
+    public int TotalArrowLimit = 20; 
 }

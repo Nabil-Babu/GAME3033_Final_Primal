@@ -9,12 +9,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float RunSpeed;
     [SerializeField] private Vector2 _inputVector = Vector2.zero;
     [SerializeField] private GameObject playerWeapon;
+    [SerializeField] private GameObject playerWeaponAmmoPanel;
     
     private Animator _playerAnimator;
     private PlayerState _playerState;
     private Vector3 _moveDirection = Vector3.zero;
-    private Transform _playerTransform; 
-    
+    private Transform _playerTransform;
+
     private readonly int MovementXHash = Animator.StringToHash("MovementX");
     private readonly int MovementYHash = Animator.StringToHash("MovementY");
     private static readonly int IsRunningHash = Animator.StringToHash("IsRunning");
@@ -59,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
             if(_playerState.IsBowEquipped) _playerAnimator.SetTrigger(EquipBow);
             _playerAnimator.SetBool(IsBowEquipped,  _playerState.IsBowEquipped);
             playerWeapon.SetActive(_playerState.IsBowEquipped);
+            playerWeaponAmmoPanel.SetActive((_playerState.IsBowEquipped));
         }
     }
 

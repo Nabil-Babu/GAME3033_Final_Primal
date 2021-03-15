@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class PlayerCamera : MonoBehaviour
     public GameObject AimCamera;
 
     public GameObject CrossHair; 
+    public TextMeshProUGUI ArrowAmmoText; 
     
     [Header("Camera Settings")]
     [SerializeField] private float UpperPitchLimit = 80;
@@ -34,6 +37,7 @@ public class PlayerCamera : MonoBehaviour
     
     private static readonly int EquipArrow = Animator.StringToHash("EquipArrow");
     private static readonly int IsAiming = Animator.StringToHash("IsAiming");
+    private static readonly int FireArrow = Animator.StringToHash("FireArrow");
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +48,7 @@ public class PlayerCamera : MonoBehaviour
         _playerAnimator = GetComponent<Animator>();
         _previousMouseDelta = Vector2.zero; 
         _followTargetTransform.localEulerAngles = new Vector3(DefaultCameraPitch, 0, 0);
+        ArrowAmmoText.text = _playerState.CurrentArrows.ToString();
     }
 
     public void OnAim(InputValue value)
@@ -74,7 +79,13 @@ public class PlayerCamera : MonoBehaviour
     {
         if (value.isPressed)
         {
-            if (!_playerState.IsAiming) return; 
+            if (!_playerState.IsAiming) return;
+
+            _playerState.CurrentArrows--;
+            
+            _playerAnimator.SetTrigger(FireArrow);
+
+            if (_playerState.CurrentArrows <= 0) _playerState.CurrentArrows = 0;
             
             Ray screenRay = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2, 0));
             Debug.DrawRay(screenRay.origin, screenRay.direction*100, Color.green);
@@ -86,6 +97,8 @@ public class PlayerCamera : MonoBehaviour
             {
                 hitInfo.collider.gameObject.GetComponent<EnemyController>().Death();
             }
+
+            ArrowAmmoText.text = _playerState.CurrentArrows.ToString();
         }
     }
 
