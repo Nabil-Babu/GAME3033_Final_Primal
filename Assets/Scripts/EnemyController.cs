@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class EnemyController : MonoBehaviour
 {
-    public GameObject Player; 
+    public GameObject Player;
+    public UnityEvent EnemyDeath;
     
     [SerializeField] private Animator _animator;
     [SerializeField] private NavMeshAgent _agent;
@@ -29,6 +31,10 @@ public class EnemyController : MonoBehaviour
         {
             _agent.SetDestination(Player.transform.position);
         }
+        else
+        {
+            _agent.isStopped = true;
+        }
         
         AnimateAgent();
     }
@@ -49,6 +55,7 @@ public class EnemyController : MonoBehaviour
     {
         isAlive = false;
         StartCoroutine(StartDeath());
+        EnemyDeath.Invoke();
     }
 
     IEnumerator StartDeath()
