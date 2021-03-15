@@ -70,6 +70,25 @@ public class PlayerCamera : MonoBehaviour
         _playerAnimator.SetBool(IsAiming, _playerState.IsAiming);
     }
 
+    public void OnAttack(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            if (!_playerState.IsAiming) return; 
+            
+            Ray screenRay = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2, 0));
+            Debug.DrawRay(screenRay.origin, screenRay.direction*100, Color.green);
+
+            if (!Physics.Raycast(screenRay, out RaycastHit hitInfo, 200.0f)) return;
+            HitLocation = hitInfo.point;
+
+            if (hitInfo.collider.gameObject.GetComponent<EnemyController>())
+            {
+                hitInfo.collider.gameObject.GetComponent<EnemyController>().Death();
+            }
+        }
+    }
+
     public void OnLook(InputValue value)
     {
         HitLocation = Vector3.zero;

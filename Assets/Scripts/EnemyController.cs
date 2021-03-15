@@ -12,6 +12,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     private static readonly int IsWalking = Animator.StringToHash("IsWalking");
 
+    private bool isAlive = true; 
+    
     private void Start()
     {
         _animator = GetComponent<Animator>();
@@ -23,7 +25,11 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        _agent.SetDestination(Player.transform.position);
+        if (isAlive)
+        {
+            _agent.SetDestination(Player.transform.position);
+        }
+        
         AnimateAgent();
     }
 
@@ -41,13 +47,14 @@ public class EnemyController : MonoBehaviour
 
     public void Death()
     {
+        isAlive = false;
         StartCoroutine(StartDeath());
     }
 
     IEnumerator StartDeath()
     {
         _animator.SetTrigger("Death");
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(5.0f);
         Destroy(gameObject);
     }
 }

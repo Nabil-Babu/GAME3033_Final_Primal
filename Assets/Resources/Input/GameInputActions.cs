@@ -57,6 +57,14 @@ public class @GameInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f5a7355-dc3e-47f9-987a-197815da8e09"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -158,6 +166,17 @@ public class @GameInputActions : IInputActionCollection, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""38535735-db0a-4803-8ad4-f28d10bd59d7"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -171,6 +190,7 @@ public class @GameInputActions : IInputActionCollection, IDisposable
         m_ThirdPerson_Run = m_ThirdPerson.FindAction("Run", throwIfNotFound: true);
         m_ThirdPerson_EquipBow = m_ThirdPerson.FindAction("EquipBow", throwIfNotFound: true);
         m_ThirdPerson_Aim = m_ThirdPerson.FindAction("Aim", throwIfNotFound: true);
+        m_ThirdPerson_Attack = m_ThirdPerson.FindAction("Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -225,6 +245,7 @@ public class @GameInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_ThirdPerson_Run;
     private readonly InputAction m_ThirdPerson_EquipBow;
     private readonly InputAction m_ThirdPerson_Aim;
+    private readonly InputAction m_ThirdPerson_Attack;
     public struct ThirdPersonActions
     {
         private @GameInputActions m_Wrapper;
@@ -234,6 +255,7 @@ public class @GameInputActions : IInputActionCollection, IDisposable
         public InputAction @Run => m_Wrapper.m_ThirdPerson_Run;
         public InputAction @EquipBow => m_Wrapper.m_ThirdPerson_EquipBow;
         public InputAction @Aim => m_Wrapper.m_ThirdPerson_Aim;
+        public InputAction @Attack => m_Wrapper.m_ThirdPerson_Attack;
         public InputActionMap Get() { return m_Wrapper.m_ThirdPerson; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +280,9 @@ public class @GameInputActions : IInputActionCollection, IDisposable
                 @Aim.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAim;
+                @Attack.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAttack;
             }
             m_Wrapper.m_ThirdPersonActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,6 +302,9 @@ public class @GameInputActions : IInputActionCollection, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
             }
         }
     }
@@ -288,5 +316,6 @@ public class @GameInputActions : IInputActionCollection, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnEquipBow(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }
