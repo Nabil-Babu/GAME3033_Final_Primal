@@ -15,6 +15,7 @@ public class WayPointRoute : MonoBehaviour
     public GameObject GetWayPointAtIndex(int index)
     {
         if (WayPoints.Length <= 0) return null;
+        if (index > WayPoints.Length) return null;
         return WayPoints[index];
     }
 }
