@@ -8,8 +8,7 @@ using Vector3 = UnityEngine.Vector3;
 
 public class EnemyController : MonoBehaviour
 {
-    
-    public GameObject Player;
+    [HideInInspector]
     public UnityEvent EnemyDeath;
     public WayPointRoute WayPointRoute;
 
@@ -35,7 +34,7 @@ public class EnemyController : MonoBehaviour
         _enemyState = GetComponent<EnemyState>();
         
         // Set First Destination 
-        if(WayPointRoute) SetDestination(WayPointRoute.GetFirstPoint());
+        if (WayPointRoute) SetDestination(WayPointRoute.GetFirstPoint());
     }
 
     private void Update()
