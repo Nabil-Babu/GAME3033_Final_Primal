@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1713398376561001505}
   - component: {fileID: 1713398376561001504}
   - component: {fileID: 1713398376561001532}
+  - component: {fileID: 5860756078984684804}
   - component: {fileID: 1713398376561001507}
   - component: {fileID: 1713398376561001506}
   - component: {fileID: 1713398376561001533}
@@ -77,6 +78,22 @@ NavMeshAgent:
   m_BaseOffset: 0.75
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5860756078984684804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713398376561001511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1436bfa01df84f440b258485650ac6d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isWaiting: 0
+  isMoving: 0
+  isAttacking: 0
+  isTargetInLOS: 0
 --- !u!114 &1713398376561001507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,9 +107,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  EnemyDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  WayPointRoute: {fileID: 0}
   _animator: {fileID: 0}
   _agent: {fileID: 0}
   _rigidbody: {fileID: 0}
+  _enemyState: {fileID: 0}
+  currentDestination: {fileID: 0}
 --- !u!54 &1713398376561001506
 Rigidbody:
   m_ObjectHideFlags: 0
