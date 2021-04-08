@@ -17,8 +17,6 @@ public class PlayerCamera : MonoBehaviour
     public TextMeshProUGUI ArrowAmmoText; 
     
     [Header("Camera Settings")]
-    [SerializeField] private float UpperPitchLimit = 80;
-    [SerializeField] private float LowerPitchLimit = 5;
     [SerializeField] private float DefaultCameraPitch = 10; 
     [SerializeField] private float cameraRotationSpeed = 1f;
     [SerializeField] private float horizontalDamping = 1f;

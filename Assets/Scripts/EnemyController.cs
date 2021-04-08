@@ -10,35 +10,51 @@ public class EnemyController : MonoBehaviour
 {
     [HideInInspector]
     public UnityEvent EnemyDeath;
+    
+    [Tooltip("WayPoints must be Nav Mesh reachable")]
     public WayPointRoute WayPointRoute;
-
+    
+    // Controller Editor Settings
     public float WaitTime = 3.0f; 
+    public float ChaseSpeed = 7.5f; 
+    public float DefaultSpeed = 5.0f; 
+   
     // GO Components
     [SerializeField] private Animator _animator;
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private EnemyState _enemyState;
+    [SerializeField] private EnemySensor _enemySensor;
     
     // Animation Hashes
     private static readonly int IsWalking = Animator.StringToHash("IsWalking");
-
+    private static readonly int IsRunning = Animator.StringToHash("IsRunning");
+    
+    // Private Stuff
     private bool _isAlive = true;
+    private bool _isRunning = false;
     private bool _destinationSet = false;
     private GameObject _currentDestination = null;
-    private int _currentWayPointIndex = 0; 
+    private int _currentWayPointIndex = 0;
     
+
     private void Start()
     {
         // Grab Components 
         _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
         _enemyState = GetComponent<EnemyState>();
+        _enemySensor = GetComponent<EnemySensor>();
         
         // Set First Destination 
         if (WayPointRoute) SetDestination(WayPointRoute.GetFirstPoint());
+        
+        //Default Values
+        _agent.speed = DefaultSpeed;
     }
 
     private void Update()
     {
+        // Basic AI Loop
         if (!_isAlive) _agent.isStopped = true;
         DetermineState();
         AnimateAgent();
@@ -50,9 +66,18 @@ public class EnemyController : MonoBehaviour
         {
             _animator.SetBool(IsWalking, true);
             _enemyState.isMoving = true;
+            if (_isRunning)
+            {
+                _animator.SetBool(IsRunning, true);
+            }
+            else
+            {
+                _animator.SetBool(IsRunning, false);
+            }
         }
         else
         {
+            _animator.SetBool(IsRunning, false);
             _animator.SetBool(IsWalking, false);
             _enemyState.isMoving = false;
         }
@@ -63,6 +88,24 @@ public class EnemyController : MonoBehaviour
         _isAlive = false;
         StartCoroutine(StartDeath());
         EnemyDeath.Invoke();
+    }
+
+    public void EnterChase()
+    {
+        _isRunning = true;
+        _enemyState.isChasing = true;
+        ClearDestination();
+        SetDestination(_enemySensor.Player);
+        _agent.speed = ChaseSpeed;
+    }
+
+    public void ExitChase()
+    {
+        _isRunning = false;
+        _enemyState.isChasing = false;
+        ClearDestination();
+        SetDestination(WayPointRoute.GetWayPointAtIndex(_currentWayPointIndex));
+        _agent.speed = DefaultSpeed;
     }
 
     public void Wait()
@@ -91,11 +134,34 @@ public class EnemyController : MonoBehaviour
 
     void DetermineState()
     {
+        if (_enemyState.isTargetInLOS)
+        {
+            if (!_enemyState.isChasing)
+            {
+                EnterChase();
+            }
+        }
+        else
+        {
+            if (_enemyState.isChasing)
+            {
+                ExitChase();
+            }
+        }
+        
         if (_destinationSet)
         {
             if (_agent.remainingDistance <= _agent.stoppingDistance)
             {
-                Wait();
+                if (_enemyState.isChasing)
+                {
+                    // Trigger Alarm Ends Game
+                }
+                else
+                {
+                    Wait();
+                }
+                
             }
         }
     }
