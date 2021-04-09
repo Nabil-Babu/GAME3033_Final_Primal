@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     public GameObject PausePanel;
 
+    public GameObject VictoryText;
 
+    public GameObject CaptureText; 
+    
     // Update is called once per frame
     void Update()
     {
@@ -23,6 +26,17 @@ public class GameManager : MonoBehaviour
             }
             PausePanel.SetActive(!PausePanel.activeInHierarchy);
         }
+    }
+
+
+    public void GameWon()
+    {
+        VictoryText.SetActive(true);
+    }
+    
+    public void GameLost()
+    {
+        CaptureText.SetActive(true);
     }
 
     public void ExitGame()

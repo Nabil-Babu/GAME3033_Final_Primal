@@ -160,6 +160,9 @@ public class EnemyController : MonoBehaviour
                     // Trigger Alarm Ends Game
                     ClearDestination();
                     SetDestination(_enemySensor.Player);
+                    GameManager.instance.GameLost();
+                    
+
                 }
                 else
                 {
@@ -186,5 +189,11 @@ public class EnemyController : MonoBehaviour
         _animator.SetTrigger("Death");
         yield return new WaitForSeconds(5.0f);
         Destroy(gameObject);
+    }
+
+    IEnumerator CapturePlayer()
+    {
+        yield return new WaitForSeconds(3.0f);
+        GameManager.instance.GameLost();
     }
 }
