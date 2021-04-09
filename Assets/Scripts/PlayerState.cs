@@ -6,6 +6,7 @@ public class PlayerState : MonoBehaviour
 {
     public bool IsRunning;
     public bool IsBowEquipped;
+    public bool IsCrouched;
     public bool IsStealthed;
     public bool IsAiming;
 

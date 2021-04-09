@@ -66,6 +66,7 @@ public class EnemyController : MonoBehaviour
         {
             _animator.SetBool(IsWalking, true);
             _enemyState.isMoving = true;
+            _enemyState.isWaiting = false;
             if (_isRunning)
             {
                 _animator.SetBool(IsRunning, true);
@@ -80,6 +81,7 @@ public class EnemyController : MonoBehaviour
             _animator.SetBool(IsRunning, false);
             _animator.SetBool(IsWalking, false);
             _enemyState.isMoving = false;
+            _enemyState.isWaiting = true;
         }
     }
 
@@ -108,9 +110,9 @@ public class EnemyController : MonoBehaviour
         _agent.speed = DefaultSpeed;
     }
 
-    public void Wait()
+    public void WaitForNextPoint()
     {
-        StartCoroutine(StartWaiting(WaitTime));
+        StartCoroutine(StartWaitingForNextPoint(WaitTime));
     }
 
     public void SetDestination(GameObject destination)
@@ -156,17 +158,19 @@ public class EnemyController : MonoBehaviour
                 if (_enemyState.isChasing)
                 {
                     // Trigger Alarm Ends Game
+                    ClearDestination();
+                    SetDestination(_enemySensor.Player);
                 }
                 else
                 {
-                    Wait();
+                    WaitForNextPoint();
                 }
                 
             }
         }
     }
 
-    IEnumerator StartWaiting(float waitTime)
+    IEnumerator StartWaitingForNextPoint(float waitTime)
     {
         _animator.SetBool(IsWalking, false);
         _enemyState.isWaiting = true;

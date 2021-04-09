@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
         _playerTransform = transform;
         _playerAnimator = GetComponent<Animator>();
         _playerState = GetComponent<PlayerState>();
+        _playerState.IsCrouched = false;
     }
 
     public void OnMove(InputValue value)

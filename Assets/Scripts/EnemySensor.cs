@@ -30,6 +30,8 @@ public class EnemySensor : MonoBehaviour
       playerIsInRange = inRange();
       if (inFront() && CheckLineOfSight() && inRange())
       {
+         if (_enemyState.isTargetInLOS) return;  
+         if (Player.GetComponentInParent<PlayerState>().IsStealthed) return;
          _enemyState.isTargetInLOS = true;
          Debug.DrawRay(LookFrom.transform.position, _directionToTarget, Color.green);
       }
