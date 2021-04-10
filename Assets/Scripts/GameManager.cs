@@ -53,6 +53,11 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(GoToMenu());
     }
 
+    public void MainMenuInstant()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
     IEnumerator GoToMenu()
     {
         yield return new WaitForSeconds(5.0f);
