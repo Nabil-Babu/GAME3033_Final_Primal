@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -32,15 +33,30 @@ public class GameManager : Singleton<GameManager>
     public void GameWon()
     {
         VictoryText.SetActive(true);
+        Time.timeScale = 0;
+        MainMenu();
     }
     
     public void GameLost()
     {
         CaptureText.SetActive(true);
+        MainMenu();
     }
 
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void MainMenu()
+    {
+        StartCoroutine(GoToMenu());
+    }
+
+    IEnumerator GoToMenu()
+    {
+        yield return new WaitForSeconds(5.0f);
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MenuScene");
     }
 }
